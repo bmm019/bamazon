@@ -30,4 +30,4 @@ VALUES ("Blender", "Home", 150.00, 15);
 INSERT INTO products(product_name, department_name, price, stock_quantity)
 VALUES ("Tennis Ball", "Pets", 5.99, 25);
 INSERT INTO products(product_name, department_name, price, stock_quantity)
-VALUES ("Treats", "Pets", 10.00, 17);
+VALUES ("Bone", "Pets", 10.00, 17);
