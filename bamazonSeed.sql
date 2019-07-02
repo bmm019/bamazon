@@ -7,7 +7,7 @@ item_id INT NOT NULL AUTO_INCREMENT,
 product_name VARCHAR(150) NOT NULL,
 department_name VARCHAR(50) NULL,
 price DECIMAL(10,4) NOT NULL,
-stock_quantity INT NOT NULL,
+stock_quantity INT(100) NOT NULL,
 PRIMARY KEY (item_id)
 );
 
@@ -28,6 +28,6 @@ VALUES ("Toaster", "Home", 75.00, 10);
 INSERT INTO products(product_name, department_name, price, stock_quantity)
 VALUES ("Blender", "Home", 150.00, 15);
 INSERT INTO products(product_name, department_name, price, stock_quantity)
-VALUES ("Tennis Balls", "Pets", 5.99, 25);
+VALUES ("Tennis Ball", "Pets", 5.99, 25);
 INSERT INTO products(product_name, department_name, price, stock_quantity)
 VALUES ("Treats", "Pets", 10.00, 17);
