@@ -1,6 +1,8 @@
 require("dotenv").config();
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+const chalk = require('chalk');
+const table = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -20,7 +22,7 @@ connection.connect(function(err) {
 
 // function that starts the aoo and prompts user
 function start(){
-    console.log("WELCOME TO BAMAZON");
+    console.log(chalk.blue.bold("\nWELCOME TO BAMAZON\n"));
     inquirer.prompt(
         {
             name: "browse",
@@ -38,18 +40,15 @@ function start(){
 
 // function to display available items
 function showItems() {
-    console.log("\nAll Products\n")
-    console.log("\nId" + " | " + "Product" + " | " + "Department" + " | " + "Price" + " | " + "Quantity")
-    console.log("---------------------------------------------");
-    // Retrieveing data from the database table.
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        // console.log(res);
+		// console.log(res);
+		var products = [];
         for (var i = 0; i < res.length; i++) {
-            console.log(
-                res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+            products.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
         }
-        console.log("---------------------------------------------");
+        var headings = ["Item ID", "Product", "Department", "Price ($)", "Quantity in Stock"];
+		console.table(headings, products);
         promptUser();
     });
 
@@ -64,7 +63,7 @@ function promptUser() {
 			message: "Please enter the ID number of the item you'd like to purchase.",
 			validate: function(value) {
 				if (value <= 0 || value > 10 || isNaN(value)) {
-					console.log("\nPlease enter a valid item ID.\n");
+					console.log(chalk.red.bold("\nPlease enter a valid item ID.\n"));
 				} else {
 					return true;
 				}
@@ -76,7 +75,7 @@ function promptUser() {
 			message: "Please enter the quantity of the item you'd like to purchase.",
 			validate: function(value) {
 				if (isNaN(value)) {
-					console.log("\nPlease enter a valid number.\n");
+					console.log(chalk.red.bold("\nPlease enter a valid number.\n"));
 				} else {
 					return true;
 				}
@@ -91,15 +90,15 @@ function promptUser() {
 
 			if (itemQuantity > selected.stock_quantity && selected.stock_quantity > 1) {
 				statement = "\nSorry, we only have " + selected.stock_quantity + " " + selected.product_name + "s available.\n";
-				console.log(statement);
+				console.log(chalk.red.bold(statement));
 				promptUser();
 			} else if (itemQuantity > selected.stock_quantity && selected.stock_quantity === 1) {
 				statement = "\nSorry, we only have 1 " + selected.product_name + " available.\n";
-				console.log(statement);
+				console.log(chalk.red.bold(statement));
 				promptUser();
 			} else if (itemQuantity > selected.stock_quantity && selected.stock_quantity < 1) {
 				statement = "\nSorry, " + selected.product_name + " is out of stock.\n";
-				console.log(statement);
+				console.log(chalk.red.bold(statement));
 				promptUser();
 			} else if (+itemQuantity === 1) {
 				statement = "\nYou are purchasing 1 " + selected.product_name + ".";
@@ -123,7 +122,7 @@ function buyProduct() {
 			connection.query("UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?", [itemQuantity, itemID], function(err, res) {
 				if (err) throw err;
 				var totalStatement = "\nYour total is $" + (itemQuantity * selected.price) + "\n";
-                console.log(totalStatement);
+				console.log(chalk.red.bold(totalStatement));
                 buyDifferent();
 			});
 		} else {
@@ -150,6 +149,6 @@ function buyDifferent() {
 
 //function that exits
 function exit(){
-    console.log("Thank you for visiting Bamazon!")
+    console.log(chalk.blue.bold("\nThank you for visiting Bamazon!\n"));
     connection.end();
 }   
