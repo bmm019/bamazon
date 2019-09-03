@@ -161,7 +161,7 @@ function addInv() {
 
 // function that makes a sql query to add a new product to the database
 function newProduct() {
-	inq.prompt([
+	inquirer.prompt([
 		{
 			name: "name",
 			type: "input",
