@@ -1,8 +1,8 @@
 require("dotenv").config();
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-const chalk = require('chalk');
-const table = require('console.table');
+var chalk = require('chalk');
+var table = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",

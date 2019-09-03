@@ -1,8 +1,8 @@
 require("dotenv").config();
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-const chalk = require('chalk');
-const table = require('console.table');
+var chalk = require('chalk');
+var table = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -31,7 +31,8 @@ function start(){
         }
     ).then(function(answer){
         if(answer.browse){
-            showItems();
+			showItems();
+			setTimeout(promptUser, 1000);
         } else {
             exit();
         }
@@ -49,7 +50,7 @@ function showItems() {
         }
         var headings = ["Item ID", "Product", "Department", "Price ($)", "Quantity in Stock"];
 		console.table(headings, products);
-        promptUser();
+        
     });
 
 } 
@@ -123,7 +124,7 @@ function buyProduct() {
 				if (err) throw err;
 				var totalStatement = "\nYour total is $" + (itemQuantity * selected.price) + "\n";
 				console.log(chalk.red.bold(totalStatement));
-                buyDifferent();
+                setTimeout(buyDifferent, 1500);
 			});
 		} else {
 			buyDifferent();
@@ -141,6 +142,7 @@ function buyDifferent() {
 	).then(function(answer) {
 		if (answer.differentItem) {
 			showItems();
+			setTimeout(promptUser, 1000);
 		} else {
 			exit();
 		}
